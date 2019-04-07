@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on Pagers and Pints</title>
+    <link>/tags/docker/</link>
+    <description>Recent content in Docker on Pagers and Pints</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 29 Aug 2014 21:19:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Dockerfile Golf (or optimizing the Docker build process)</title>
+      <link>/posts/dockerfile-golf-or-optimizing-the-docker-build-process/</link>
+      <pubDate>Fri, 29 Aug 2014 21:19:00 +0000</pubDate>
+      
+      <guid>/posts/dockerfile-golf-or-optimizing-the-docker-build-process/</guid>
+      <description>I was working with a friend of mine on his startup Down For Whatever and he wanted to use Docker.
+I created a docker farm for him and we&amp;rsquo;re using Centurion for deployments, we signed up for a docker hub account to store images and started pushing code.
+A few days later he emailed me saying that he wanted to switch to capistrano for code deployments instead of building a docker image each time because pushing the image to docker hub took too damn long.</description>
+    </item>
+    
+    <item>
+      <title>PostgreSQL Performance on Docker</title>
+      <link>/posts/postgresql-performance-on-docker/</link>
+      <pubDate>Thu, 26 Jun 2014 03:05:00 +0000</pubDate>
+      
+      <guid>/posts/postgresql-performance-on-docker/</guid>
+      <description>While preparing my presentation on Postgres and Docker to the PDX Postgres User Group for the June meeting, I thought it would be cool to run Postgres on Docker through some rough benchmarks. What I ended up finding was fairly surprising.
+The Setup For this test I used Digital Ocean&amp;rsquo;s smallest droplet 512M RAM/1 CPU/20G SSD Disks.
+They have an awesome feature where you can chose the type of application you want to run on the droplet and they&amp;rsquo;ll pre-configure it for you.</description>
+    </item>
+    
+  </channel>
+</rss>

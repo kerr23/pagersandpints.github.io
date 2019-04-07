@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>/posts/amazon-maintenance-and-your-rds-instances/</loc>
+    <lastmod>2016-02-05T00:12:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/introducing-mrtuner-and-rdstune/</loc>
+    <lastmod>2015-01-15T22:42:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/dockerfile-golf-or-optimizing-the-docker-build-process/</loc>
+    <lastmod>2014-08-29T21:19:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/postgresql-performance-on-docker/</loc>
+    <lastmod>2014-06-26T03:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/stackdriver-acquired-by-google/</loc>
+    <lastmod>2014-05-08T04:28:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/tune-your-postgres-rds-instance-via-parameter-groups/</loc>
+    <lastmod>2013-11-20T00:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/mention-in-the-postgres-release-notes/</loc>
+    <lastmod>2012-10-15T22:31:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/presentation-pdxpug/</loc>
+    <lastmod>2012-09-12T17:46:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/</loc>
+    <lastmod>2012-08-14T04:53:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/i-o-spikes-during-checkpoint/</loc>
+    <lastmod>2012-07-10T21:16:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/pg_service-conf-in-redhat/</loc>
+    <lastmod>2012-06-25T16:03:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/psql-reverse-search-history/</loc>
+    <lastmod>2012-06-14T21:15:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/create-a-backup-manifest-in-postgresql-with-oid2name/</loc>
+    <lastmod>2012-06-07T05:02:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/enable_materialfalse/</loc>
+    <lastmod>2012-06-01T17:39:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/a-script-to-see-row-counts-and-table-size-in-postgresql/</loc>
+    <lastmod>2012-05-13T12:13:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/how-to-fix-stalled-cups-printing/</loc>
+    <lastmod>2012-05-13T12:12:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/how-to-reset-sequences-in-postgresql/</loc>
+    <lastmod>2012-05-13T12:11:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/using-generate_series-in-postgresql/</loc>
+    <lastmod>2012-05-13T12:07:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/using-insert-returning-with-perl-and-postgresql/</loc>
+    <lastmod>2012-05-13T12:05:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/parsing-large-files-with-pgfouine/</loc>
+    <lastmod>2012-05-13T11:56:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/how-to-add-quotes-to-results-in-dynamic-sql/</loc>
+    <lastmod>2012-05-13T11:38:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/aws/</loc>
+    <lastmod>2016-02-05T00:12:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/docker/</loc>
+    <lastmod>2014-08-29T21:19:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2016-02-05T00:12:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/postgresql/</loc>
+    <lastmod>2016-02-05T00:12:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/posts/</loc>
+    <lastmod>2016-02-05T00:12:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2016-02-05T00:12:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/uncategorized/</loc>
+    <lastmod>2012-10-15T22:31:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

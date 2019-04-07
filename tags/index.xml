@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Pagers and Pints</title>
+    <link>/tags/</link>
+    <description>Recent content in Tags on Pagers and Pints</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 05 Feb 2016 00:12:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Aws</title>
+      <link>/tags/aws/</link>
+      <pubDate>Fri, 05 Feb 2016 00:12:00 +0000</pubDate>
+      
+      <guid>/tags/aws/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>/tags/docker/</link>
+      <pubDate>Fri, 29 Aug 2014 21:19:00 +0000</pubDate>
+      
+      <guid>/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Postgresql</title>
+      <link>/tags/postgresql/</link>
+      <pubDate>Fri, 05 Feb 2016 00:12:00 +0000</pubDate>
+      
+      <guid>/tags/postgresql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Uncategorized</title>
+      <link>/tags/uncategorized/</link>
+      <pubDate>Mon, 15 Oct 2012 22:31:00 +0000</pubDate>
+      
+      <guid>/tags/uncategorized/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

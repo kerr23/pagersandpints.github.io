@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Pagers and Pints</title>
+    <link>/posts/</link>
+    <description>Recent content in Posts on Pagers and Pints</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 05 Feb 2016 00:12:00 +0000</lastBuildDate>
+    
+	<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Amazon Maintenance and your RDS Instances</title>
+      <link>/posts/amazon-maintenance-and-your-rds-instances/</link>
+      <pubDate>Fri, 05 Feb 2016 00:12:00 +0000</pubDate>
+      
+      <guid>/posts/amazon-maintenance-and-your-rds-instances/</guid>
+      <description>I recently had the pleasure of Amazon telling me that they had to reboot all of my Postgres RDS instances to apply some security patches.
+When using RDS you generally expect that Amazon is going to do something like this and I was at least happy that they told me about it and gave me the option to trigger it on a specific maintenance window or else on my own time (up to a drop dead date where they&amp;rsquo;d just do it for me)</description>
+    </item>
+    
+    <item>
+      <title>Introducing MrTuner and RDSTune</title>
+      <link>/posts/introducing-mrtuner-and-rdstune/</link>
+      <pubDate>Thu, 15 Jan 2015 22:42:00 +0000</pubDate>
+      
+      <guid>/posts/introducing-mrtuner-and-rdstune/</guid>
+      <description>Two simple gems to help tune your Postgres databases.
+I&amp;rsquo;m a big fan of PgTune. I think that in many cases you can run PgTune and set-it-and-forget-it for your Postgres parameters. I like it so much that I often wish I had access to it in my code - especially when working with Puppet to provision new databases servers.
+When I started looking into RDS Postgres a while back I realized that the default configuration for those instances was lacking and I really wished I could run PgTune on the RDS instances.</description>
+    </item>
+    
+    <item>
+      <title>Dockerfile Golf (or optimizing the Docker build process)</title>
+      <link>/posts/dockerfile-golf-or-optimizing-the-docker-build-process/</link>
+      <pubDate>Fri, 29 Aug 2014 21:19:00 +0000</pubDate>
+      
+      <guid>/posts/dockerfile-golf-or-optimizing-the-docker-build-process/</guid>
+      <description>I was working with a friend of mine on his startup Down For Whatever and he wanted to use Docker.
+I created a docker farm for him and we&amp;rsquo;re using Centurion for deployments, we signed up for a docker hub account to store images and started pushing code.
+A few days later he emailed me saying that he wanted to switch to capistrano for code deployments instead of building a docker image each time because pushing the image to docker hub took too damn long.</description>
+    </item>
+    
+    <item>
+      <title>PostgreSQL Performance on Docker</title>
+      <link>/posts/postgresql-performance-on-docker/</link>
+      <pubDate>Thu, 26 Jun 2014 03:05:00 +0000</pubDate>
+      
+      <guid>/posts/postgresql-performance-on-docker/</guid>
+      <description>While preparing my presentation on Postgres and Docker to the PDX Postgres User Group for the June meeting, I thought it would be cool to run Postgres on Docker through some rough benchmarks. What I ended up finding was fairly surprising.
+The Setup For this test I used Digital Ocean&amp;rsquo;s smallest droplet 512M RAM/1 CPU/20G SSD Disks.
+They have an awesome feature where you can chose the type of application you want to run on the droplet and they&amp;rsquo;ll pre-configure it for you.</description>
+    </item>
+    
+    <item>
+      <title>Stackdriver Acquired by google</title>
+      <link>/posts/stackdriver-acquired-by-google/</link>
+      <pubDate>Thu, 08 May 2014 04:28:00 +0000</pubDate>
+      
+      <guid>/posts/stackdriver-acquired-by-google/</guid>
+      <description>Grats to Stackdriver on their Acquisition by Google.
+Now if they&amp;rsquo;d like to bring me, and my Stackdriver Pluggable Custom Metrics along. That&amp;rsquo;d be just peachy.</description>
+    </item>
+    
+    <item>
+      <title>Tune your Postgres RDS instance via parameter groups</title>
+      <link>/posts/tune-your-postgres-rds-instance-via-parameter-groups/</link>
+      <pubDate>Wed, 20 Nov 2013 00:39:00 +0000</pubDate>
+      
+      <guid>/posts/tune-your-postgres-rds-instance-via-parameter-groups/</guid>
+      <description>It seems like the folks at Amazon set some strange defaults for their RDS Postgres instances and they make it pretty darn difficult to allow for dynamically sized instance.
+You tune your Postgres RDS instance via Parameter Groups. In the parameter group configuration is all of the normal PG tuning parameters from your postgresql.conf.
+They provide you with a variable: {DBInstanceClassMemory} which returns the memory in bytes available to the instance, and you can use that in some limited ways to dynamically set parameters based on the instance type you chose for your RDS database.</description>
+    </item>
+    
+    <item>
+      <title>Mention in the Postgres release notes</title>
+      <link>/posts/mention-in-the-postgres-release-notes/</link>
+      <pubDate>Mon, 15 Oct 2012 22:31:00 +0000</pubDate>
+      
+      <guid>/posts/mention-in-the-postgres-release-notes/</guid>
+      <description>I recently submitted a (very) small patch for PostgreSQL to fix a problem we were having with the backup label not getting fsynced to disk. (which is a problem if you&amp;rsquo;re using something like AWS or SAN snapshots.)
+ I kindly got a mention in the release notes for it, pretty cool! (thanks guys!)</description>
+    </item>
+    
+    <item>
+      <title>Presentation @PDXPUG</title>
+      <link>/posts/presentation-pdxpug/</link>
+      <pubDate>Wed, 12 Sep 2012 17:46:00 +0000</pubDate>
+      
+      <guid>/posts/presentation-pdxpug/</guid>
+      <description>I recently did a talk about vertically scaling Postgres for the PDXPUG Portland Postgres User group.
+The presentation is mostly about some observations and challenges that I&amp;rsquo;ve run into while designing and running a very large Postgres install.
+They were kind enough to record the video and post it on Vimo.
+(Also, it turns out I&amp;rsquo;m not the greatest public speaker)
+[vimeo 49314500 w=500 h=375]
+PDXPUG: Vertically Scaling Postgres from Mark Wong on Vimeo.</description>
+    </item>
+    
+    <item>
+      <title>Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages</title>
+      <link>/posts/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/</link>
+      <pubDate>Tue, 14 Aug 2012 04:53:00 +0000</pubDate>
+      
+      <guid>/posts/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/</guid>
+      <description>I&amp;rsquo;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
+Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover
+Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command
+Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0
+Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298</description>
+    </item>
+    
+    <item>
+      <title>I/O Spikes during Checkpoint</title>
+      <link>/posts/i-o-spikes-during-checkpoint/</link>
+      <pubDate>Tue, 10 Jul 2012 21:16:00 +0000</pubDate>
+      
+      <guid>/posts/i-o-spikes-during-checkpoint/</guid>
+      <description>I run Postgres on a fairly large linux server with 256G of ram.
+During high load, I found that the I/O of the $PGDATA volume was spiking to 100% making the database slow down to a crawl for seconds at a time, despite having a fairly fast I/O subsystem.
+This is what the spike looked like from an iostat output:
+Date r/s w/s rsec/s wsec/s await svctm %util
+[&amp;hellip;]
+07/10/12 00:35:36 0 69.</description>
+    </item>
+    
+    <item>
+      <title>pg_service.conf in redhat</title>
+      <link>/posts/pg_service-conf-in-redhat/</link>
+      <pubDate>Mon, 25 Jun 2012 16:03:00 +0000</pubDate>
+      
+      <guid>/posts/pg_service-conf-in-redhat/</guid>
+      <description>I&amp;rsquo;m toying around with pg_service.conf. It wasn&amp;rsquo;t obvious - but I was able to determine that if you add pg_service.conf to /etc/sysconfig/pgsql/ it will get picked up globally.</description>
+    </item>
+    
+    <item>
+      <title>psql - reverse search history</title>
+      <link>/posts/psql-reverse-search-history/</link>
+      <pubDate>Thu, 14 Jun 2012 21:15:00 +0000</pubDate>
+      
+      <guid>/posts/psql-reverse-search-history/</guid>
+      <description>psql the postgresql command line client is usually compiled with libreadline support. As a result of this you can use some neat functionality such as reverse search by hitting ctl-r within the client.
+report=#
+hit CTL-r
+(reverse-i-search)`&amp;rsquo;:
+start typing
+(reverse-i-search)`sel&amp;rsquo;: select * from report.audit where</description>
+    </item>
+    
+    <item>
+      <title>Create a backup manifest in PostgreSQL with oid2name</title>
+      <link>/posts/create-a-backup-manifest-in-postgresql-with-oid2name/</link>
+      <pubDate>Thu, 07 Jun 2012 05:02:00 +0000</pubDate>
+      
+      <guid>/posts/create-a-backup-manifest-in-postgresql-with-oid2name/</guid>
+      <description>oid2name is a nifty little program comes with postgresql an it allows you to take those obscure relfilenode named datafiles at the OS level and map them to database objects.
+The only downside to this little tool is that it doesn&amp;rsquo;t exactly work when your database is down since it uses pg_* to figure out this info. So if you&amp;rsquo;re in a situation where you&amp;rsquo;re restoring the database and find out that you&amp;rsquo;re missing a file from the backup - you may want to know what table is lost.</description>
+    </item>
+    
+    <item>
+      <title>enable_material=false</title>
+      <link>/posts/enable_materialfalse/</link>
+      <pubDate>Fri, 01 Jun 2012 17:39:00 +0000</pubDate>
+      
+      <guid>/posts/enable_materialfalse/</guid>
+      <description>I remember back in my oracle days, one of the first things I&amp;rsquo;d turn off in my OLTP environments was hash_join_enabled. Oracle would spend more time creating the hash table than it would actually processing the query.
+I ran into that again this week, but this time with Postgres 9.1 and this time with Materialize.
+Here&amp;rsquo;s the query stats (from the wonderfull http://explain.depesz.com) pretty clearly showed me where the problem was.</description>
+    </item>
+    
+    <item>
+      <title>A script to see row counts and table size in PostgreSQL</title>
+      <link>/posts/a-script-to-see-row-counts-and-table-size-in-postgresql/</link>
+      <pubDate>Sun, 13 May 2012 12:13:00 +0000</pubDate>
+      
+      <guid>/posts/a-script-to-see-row-counts-and-table-size-in-postgresql/</guid>
+      <description>Here is a little perl script that I use to give me a list of tables in a schema, a rowcount and the pg_relation_size of a table. The usage is just:
+pg_rowcount
+ex: ./pg_rowcount.pl david.kerr pg_catalog
+The output looks like this:
+Table Rows Size
+--------------------------------------------------------------
+pg_statistic 1853 1672 kB
+pg_type 910 168 kB
+pg_attribute 9569 1488 kB
+pg_class 1371 416 kB
+pg_authid 52 16 kB
+pg_index 766 112 kB
+pg_operator 705 104 kB</description>
+    </item>
+    
+    <item>
+      <title>How To Fix Stalled CUPS Printing</title>
+      <link>/posts/how-to-fix-stalled-cups-printing/</link>
+      <pubDate>Sun, 13 May 2012 12:12:00 +0000</pubDate>
+      
+      <guid>/posts/how-to-fix-stalled-cups-printing/</guid>
+      <description>Every once in a while CUPS printing just stalls, no reason that I can tell. (I blame the network, naturally) but what ends up happening is that the print jobs get backed up and you need to clear out the queue. The fastest way to do this is to do:
+rm /var/spool/cups/*
+/etc/init.d/cups restart</description>
+    </item>
+    
+    <item>
+      <title>How To Reset Sequences in PostgreSQL</title>
+      <link>/posts/how-to-reset-sequences-in-postgresql/</link>
+      <pubDate>Sun, 13 May 2012 12:11:00 +0000</pubDate>
+      
+      <guid>/posts/how-to-reset-sequences-in-postgresql/</guid>
+      <description>I use a lot of &amp;ldquo;serial&amp;rdquo; data type fields, sometimes the nextval of my sequence doesn&amp;rsquo;t reflect the max() of my table. Since I do a lot of moving data around these can get messed up. The basic command that you want to use to reset a sequence is:
+select setval(&amp;lsquo;sequence_name&amp;rsquo;, value);
+However, the cool thing about Postgres is that can be a query too so I use:
+select setval(&amp;lsquo;sequence_name&amp;rsquo;, select max(column_name) from tablename);</description>
+    </item>
+    
+    <item>
+      <title>Using generate_series() in PostgreSQL</title>
+      <link>/posts/using-generate_series-in-postgresql/</link>
+      <pubDate>Sun, 13 May 2012 12:07:00 +0000</pubDate>
+      
+      <guid>/posts/using-generate_series-in-postgresql/</guid>
+      <description>If you want to dummy up a bunch of data in PostgreSQL you can use this neat little trick
+create table test (a int);
+insert into test (select generate_series(0,999,1));
+INSERT 0 1000;</description>
+    </item>
+    
+    <item>
+      <title>Using insert .. returning with perl and PostgreSQL</title>
+      <link>/posts/using-insert-returning-with-perl-and-postgresql/</link>
+      <pubDate>Sun, 13 May 2012 12:05:00 +0000</pubDate>
+      
+      <guid>/posts/using-insert-returning-with-perl-and-postgresql/</guid>
+      <description>PostgreSQL provides the ability to return a value on insert. so for example:
+create table foo (id serial, name text);
+insert into foo(&amp;lsquo;dave&amp;rsquo;) returning id;
+Will return the auto-generated value for &amp;ldquo;id&amp;rdquo; assigned to &amp;lsquo;dave&amp;rsquo;
+You can leverage this from within Perl by doing something like this:
+my $foo_insert = &amp;ldquo;insert into foo(?) returning id&amp;rdquo;
+my $foo_cur = $dbh-&amp;gt;prepare($foo_insert);
+$foo_cur-&amp;gt;execute(&amp;lsquo;Dave&amp;rsquo;);
+my $foo_rec = $foo_cur-&amp;gt;fetchrow_hashref();
+print $foo_rec{&amp;ldquo;id&amp;rdquo;};</description>
+    </item>
+    
+    <item>
+      <title>Parsing Large files with Pgfouine</title>
+      <link>/posts/parsing-large-files-with-pgfouine/</link>
+      <pubDate>Sun, 13 May 2012 11:56:00 +0000</pubDate>
+      
+      <guid>/posts/parsing-large-files-with-pgfouine/</guid>
+      <description>ppgfouine is a nice logfile analyzer for PostgreSQL written in php.
+When doing a trace on a very long running ETL process the logfile generated was ~11GB.
+This left me running up against a 2GB barrier in php for fopen().
+If you&amp;rsquo;ve got a 64bit machine and can recompile php with -D_FILE_OFFSET_BITS=64 then you&amp;rsquo;re good to go. But in my case, I wasn&amp;rsquo;t able to do either.
+ The error i&amp;rsquo;d get is: PHP Fatal error: File is not readable.</description>
+    </item>
+    
+    <item>
+      <title>How To Add Quotes to results in dynamic SQL</title>
+      <link>/posts/how-to-add-quotes-to-results-in-dynamic-sql/</link>
+      <pubDate>Sun, 13 May 2012 11:38:00 +0000</pubDate>
+      
+      <guid>/posts/how-to-add-quotes-to-results-in-dynamic-sql/</guid>
+      <description>I frequently find the need to have single quoted output when i generate dynamic SQL.
+It&amp;rsquo;s always a pain to remember the exact number of ticks needed to get the quoted output.
+Here is a reminder on how to do it:
+select &amp;ldquo;&amp;rdquo;||schemaname||&amp;lsquo;.&amp;rsquo;||tablename||&amp;ldquo;&amp;rdquo; from pg_tables
+i.e., four quotes when there&amp;rsquo;s no text, or three quotes on the outside and one on the inside when there is text.
+select &amp;ldquo;&amp;lsquo;public.&amp;rsquo;||tablename||&amp;rdquo;&amp;lsquo;;&amp;rsquo; from pg_tablesselect &amp;lsquo;select pg_size_pretty(pg_relation_size(&amp;ldquo;&amp;lsquo;||tablename||&amp;rdquo;&amp;rsquo;));&amp;rsquo; from pg_tables where schemaname = &amp;lsquo;bla&amp;rsquo;;</description>
+    </item>
+    
+  </channel>
+</rss>
