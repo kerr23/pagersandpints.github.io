@@ -160,17 +160,6 @@ The only downside to this little tool is that it doesn&amp;rsquo;t exactly work 
     </item>
     
     <item>
-      <title>enable_material=false</title>
-      <link>/posts/enable_materialfalse/</link>
-      <pubDate>Fri, 01 Jun 2012 17:39:00 +0000</pubDate>
-      
-      <guid>/posts/enable_materialfalse/</guid>
-      <description>I remember back in my oracle days, one of the first things I&amp;rsquo;d turn off in my OLTP environments was hash_join_enabled. Oracle would spend more time creating the hash table than it would actually processing the query.
-I ran into that again this week, but this time with Postgres 9.1 and this time with Materialize.
-Here&amp;rsquo;s the query stats (from the wonderfull http://explain.depesz.com) pretty clearly showed me where the problem was.</description>
-    </item>
-    
-    <item>
       <title>A script to see row counts and table size in PostgreSQL</title>
       <link>/posts/a-script-to-see-row-counts-and-table-size-in-postgresql/</link>
       <pubDate>Sun, 13 May 2012 12:13:00 +0000</pubDate>
@@ -178,17 +167,9 @@ Here&amp;rsquo;s the query stats (from the wonderfull http://explain.depesz.com
       <guid>/posts/a-script-to-see-row-counts-and-table-size-in-postgresql/</guid>
       <description>Here is a little perl script that I use to give me a list of tables in a schema, a rowcount and the pg_relation_size of a table. The usage is just:
 pg_rowcount
-ex: ./pg_rowcount.pl david.kerr pg_catalog
+ex:./pg\_rowcount.pl david.kerr pg\_catalog
 The output looks like this:
-Table Rows Size
---------------------------------------------------------------
-pg_statistic 1853 1672 kB
-pg_type 910 168 kB
-pg_attribute 9569 1488 kB
-pg_class 1371 416 kB
-pg_authid 52 16 kB
-pg_index 766 112 kB
-pg_operator 705 104 kB</description>
+Table Rows Size -------------------------------------------------------------- pg_statistic 1853 1672 kB pg_type 910 168 kB pg_attribute 9569 1488 kB pg_class 1371 416 kB pg_authid 52 16 kB pg_index 766 112 kB pg_operator 705 104 kB pg_database 44 16 kB  You can download the script here</description>
     </item>
     
     <item>
@@ -198,8 +179,7 @@ pg_operator 705 104 kB</description>
       
       <guid>/posts/how-to-fix-stalled-cups-printing/</guid>
       <description>Every once in a while CUPS printing just stalls, no reason that I can tell. (I blame the network, naturally) but what ends up happening is that the print jobs get backed up and you need to clear out the queue. The fastest way to do this is to do:
-rm /var/spool/cups/*
-/etc/init.d/cups restart</description>
+rm /var/spool/cups/* /etc/init.d/cups restart  </description>
     </item>
     
     <item>
@@ -209,9 +189,8 @@ rm /var/spool/cups/*
       
       <guid>/posts/how-to-reset-sequences-in-postgresql/</guid>
       <description>I use a lot of &amp;ldquo;serial&amp;rdquo; data type fields, sometimes the nextval of my sequence doesn&amp;rsquo;t reflect the max() of my table. Since I do a lot of moving data around these can get messed up. The basic command that you want to use to reset a sequence is:
-select setval(&amp;lsquo;sequence_name&amp;rsquo;, value);
-However, the cool thing about Postgres is that can be a query too so I use:
-select setval(&amp;lsquo;sequence_name&amp;rsquo;, select max(column_name) from tablename);</description>
+select setval(&#39;sequence_name&#39;, value);  However, the cool thing about Postgres is that can be a query too so I use:
+select setval(&#39;sequence_name&#39;, select max(column_name) from tablename);  So I wrote a little perl script to look through all of the columns that have a default like &amp;ldquo;nextval&amp;rdquo; (which if you look in the database is how a serial column actually looks) and sets the sequence to the max of the value in that table.</description>
     </item>
     
     <item>
@@ -266,9 +245,8 @@ If you&amp;rsquo;ve got a 64bit machine and can recompile php with -D_FILE_OFFSE
       <description>I frequently find the need to have single quoted output when i generate dynamic SQL.
 It&amp;rsquo;s always a pain to remember the exact number of ticks needed to get the quoted output.
 Here is a reminder on how to do it:
-select &amp;ldquo;&amp;rdquo;||schemaname||&amp;lsquo;.&amp;rsquo;||tablename||&amp;ldquo;&amp;rdquo; from pg_tables
-i.e., four quotes when there&amp;rsquo;s no text, or three quotes on the outside and one on the inside when there is text.
-select &amp;ldquo;&amp;lsquo;public.&amp;rsquo;||tablename||&amp;rdquo;&amp;lsquo;;&amp;rsquo; from pg_tablesselect &amp;lsquo;select pg_size_pretty(pg_relation_size(&amp;ldquo;&amp;lsquo;||tablename||&amp;rdquo;&amp;rsquo;));&amp;rsquo; from pg_tables where schemaname = &amp;lsquo;bla&amp;rsquo;;</description>
+select &#39;&#39;&#39;&#39;||schemaname||&#39;.&#39;||tablename||&#39;&#39;&#39;&#39; from pg_tables  i.e., four quotes when there&amp;rsquo;s no text, or three quotes on the outside and one on the inside when there is text.
+select &#39;&#39;&#39;public.&#39;||tablename||&#39;&#39;&#39;;&#39; from pg_tablesselect &#39;select pg_size_pretty(pg_relation_size(&#39;&#39;&#39;||tablename||&#39;&#39;&#39;));&#39; from pg_tables where schemaname = &#39;bla&#39;;  </description>
     </item>
     
   </channel>

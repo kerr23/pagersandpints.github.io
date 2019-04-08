@@ -37,8 +37,7 @@
       
       <guid>/posts/how-to-fix-stalled-cups-printing/</guid>
       <description>Every once in a while CUPS printing just stalls, no reason that I can tell. (I blame the network, naturally) but what ends up happening is that the print jobs get backed up and you need to clear out the queue. The fastest way to do this is to do:
-rm /var/spool/cups/*
-/etc/init.d/cups restart</description>
+rm /var/spool/cups/* /etc/init.d/cups restart  </description>
     </item>
     
   </channel>

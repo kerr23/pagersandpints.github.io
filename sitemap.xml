@@ -68,11 +68,6 @@
   </url>
   
   <url>
-    <loc>/posts/enable_materialfalse/</loc>
-    <lastmod>2012-06-01T17:39:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/posts/a-script-to-see-row-counts-and-table-size-in-postgresql/</loc>
     <lastmod>2012-05-13T12:13:00+00:00</lastmod>
   </url>
