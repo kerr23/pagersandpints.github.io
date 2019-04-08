@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="generator" content="Hugo 0.54.0" />
+  
+    <title>Pagers and Pints — DevOps, SRE and Beer</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="description" content="DevOps, SRE and Beer"/>
+<meta name="keywords" content="DevOps, SRE, Site Reliability, Pager"/>
+<meta name="robots" content="noodp"/>
+<link rel="canonical" href="../../" />
+
+
+<link rel="stylesheet" href="../../assets/style.css">
+
+  <link rel="stylesheet" href="../../assets/green.css">
+
+
+
+<link rel="stylesheet" href="../../style.css">
+
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../img/apple-touch-icon-144-precomposed.png">
+
+<link rel="shortcut icon" href="../../img/favicon/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Pagers and Pints — DevOps, SRE and Beer" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:site" content="/" />
+<meta name="twitter:creator" content="" />
+<meta name="twitter:image" content="">
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Pagers and Pints — DevOps, SRE and Beer">
+<meta property="og:description" content="" />
+<meta property="og:url" content="/" />
+<meta property="og:site_name" content="Pagers and Pints" />
+<meta property="og:image" content="">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+
+
+
+
+<link href="../../index.xml" rel="alternate" type="application/rss+xml" title="Pagers and Pints" />
+
+
+
+
+
+
+
+
+
+</head>
+<body class="">
+
+
+<div class="container">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="../../">
+  <div class="logo">
+    Pagers and Pints
+  </div>
+</a>
+
+    </div>
+    <div class="menu-trigger">menu</div>
+  </div>
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="posts">
+  
+  
+  
+
+  
+  <div class="post on-list">
+    <h1 class="post-title">
+      <a href="../../posts/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/">Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages</a></h1>
+    <div class="post-meta">
+      <span class="post-date">
+        2012-08-14
+      </span>
+      <span class="post-author">::
+        Dave Kerr</span>
+    </div>
+
+    
+    <span class="post-tags">
+      
+      #<a href="../../tags/postgresql/">postgresql</a>&nbsp;
+      
+    </span>
+    
+
+    
+
+    <div class="post-content">
+      
+      
+      Update 10/15/2012
+With the release of Postgres 9.1.6 I believe that what we were running into was the critical bug that&rsquo;s fixed in that release regarding WAL replay.
+So Mystery Solved!
+I&rsquo;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
+Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0 Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298 Aug 9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG: last completed transaction was at log time 2012-08-09 09:16:08.
+      
+      
+    </div>
+
+    
+    <div>
+      <a class="read-more button"
+        href="../../posts/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/">Read more →</a>
+    </div>
+    
+  </div>
+  
+  <div class="post on-list">
+    <h1 class="post-title">
+      <a href="../../posts/i-o-spikes-during-checkpoint/">I/O Spikes during Checkpoint</a></h1>
+    <div class="post-meta">
+      <span class="post-date">
+        2012-07-10
+      </span>
+      <span class="post-author">::
+        Dave Kerr</span>
+    </div>
+
+    
+    <span class="post-tags">
+      
+      #<a href="../../tags/postgresql/">postgresql</a>&nbsp;
+      
+    </span>
+    
+
+    
+
+    <div class="post-content">
+      
+      
+      I run Postgres on a fairly large linux server with 256G of ram.
+During high load, I found that the I/O of the $PGDATA volume was spiking to 100% making the database slow down to a crawl for seconds at a time, despite having a fairly fast I/O subsystem.
+This is what the spike looked like from an iostat output:
+Date r/s w/s rsec/s wsec/s await svctm %util
+[&hellip;]
+07/10/12 00:35:36 0 69.
+      
+      
+    </div>
+
+    
+    <div>
+      <a class="read-more button"
+        href="../../posts/i-o-spikes-during-checkpoint/">Read more →</a>
+    </div>
+    
+  </div>
+  
+  <div class="post on-list">
+    <h1 class="post-title">
+      <a href="../../posts/pg_service-conf-in-redhat/">pg_service.conf in redhat</a></h1>
+    <div class="post-meta">
+      <span class="post-date">
+        2012-06-25
+      </span>
+      <span class="post-author">::
+        Dave Kerr</span>
+    </div>
+
+    
+    <span class="post-tags">
+      
+      #<a href="../../tags/linux/">linux</a>&nbsp;
+      
+      #<a href="../../tags/postgresql/">postgresql</a>&nbsp;
+      
+    </span>
+    
+
+    
+
+    <div class="post-content">
+      
+      
+      
+    </div>
+
+    
+    <div>
+      <a class="read-more button"
+        href="../../posts/pg_service-conf-in-redhat/">Read more →</a>
+    </div>
+    
+  </div>
+  
+  <div class="post on-list">
+    <h1 class="post-title">
+      <a href="../../posts/psql-reverse-search-history/">psql - reverse search history</a></h1>
+    <div class="post-meta">
+      <span class="post-date">
+        2012-06-14
+      </span>
+      <span class="post-author">::
+        Dave Kerr</span>
+    </div>
+
+    
+    <span class="post-tags">
+      
+      #<a href="../../tags/postgresql/">postgresql</a>&nbsp;
+      
+    </span>
+    
+
+    
+
+    <div class="post-content">
+      
+      
+      
+    </div>
+
+    
+    <div>
+      <a class="read-more button"
+        href="../../posts/psql-reverse-search-history/">Read more →</a>
+    </div>
+    
+  </div>
+  
+  <div class="post on-list">
+    <h1 class="post-title">
+      <a href="../../posts/create-a-backup-manifest-in-postgresql-with-oid2name/">Create a backup manifest in PostgreSQL with oid2name</a></h1>
+    <div class="post-meta">
+      <span class="post-date">
+        2012-06-07
+      </span>
+      <span class="post-author">::
+        Dave Kerr</span>
+    </div>
+
+    
+    <span class="post-tags">
+      
+      #<a href="../../tags/postgresql/">PostgreSQL</a>&nbsp;
+      
+    </span>
+    
+
+    
+
+    <div class="post-content">
+      
+      
+      oid2name is a nifty little program comes with postgresql an it allows you to take those obscure relfilenode named datafiles at the OS level and map them to database objects.
+The only downside to this little tool is that it doesn&rsquo;t exactly work when your database is down since it uses pg_* to figure out this info. So if you&rsquo;re in a situation where you&rsquo;re restoring the database and find out that you&rsquo;re missing a file from the backup - you may want to know what table is lost.
+      
+      
+    </div>
+
+    
+    <div>
+      <a class="read-more button"
+        href="../../posts/create-a-backup-manifest-in-postgresql-with-oid2name/">Read more →</a>
+    </div>
+    
+  </div>
+  
+  <div class="pagination">
+  <div class="pagination__buttons">
+    
+      <span class="button previous">
+        <a href="../../">
+          <span class="button__icon">←</span>
+          <span class="button__text">Newer posts</span>
+        </a>
+      </span>
+    
+    
+      <span class="button next">
+        <a href="../../page/3/">
+          <span class="button__text">Older posts</span>
+          <span class="button__icon">→</span>
+        </a>
+      </span>
+    
+  </div>
+</div>
+
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2019 Powered by <a href="http://gohugo.io">Hugo</a></span>
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="../../assets/main.js"></script>
+<script src="../../assets/prism.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

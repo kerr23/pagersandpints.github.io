@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages :: Pagers and Pints — DevOps, SRE and Beer</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="description" content="Update 10/15/2012
+With the release of Postgres 9.1.6 I believe that what we were running into was the critical bug that&amp;rsquo;s fixed in that release regarding WAL replay.
+So Mystery Solved!
+I&amp;rsquo;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
+Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0 Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298 Aug 9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG: last completed transaction was at log time 2012-08-09 09:16:08."/>
+<meta name="keywords" content="DevOps, SRE, Site Reliability, Pager"/>
+<meta name="robots" content="noodp"/>
+<link rel="canonical" href="../../posts/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/" />
+
+
+<link rel="stylesheet" href="../../assets/style.css">
+
+  <link rel="stylesheet" href="../../assets/green.css">
+
+
+
+<link rel="stylesheet" href="../../style.css">
+
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../img/apple-touch-icon-144-precomposed.png">
+
+<link rel="shortcut icon" href="../../img/favicon/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages :: Pagers and Pints — DevOps, SRE and Beer" />
+<meta name="twitter:description" content="Update 10/15/2012
+With the release of Postgres 9.1.6 I believe that what we were running into was the critical bug that&amp;rsquo;s fixed in that release regarding WAL replay.
+So Mystery Solved!
+I&amp;rsquo;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
+Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0 Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298 Aug 9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG: last completed transaction was at log time 2012-08-09 09:16:08." />
+<meta name="twitter:site" content="/" />
+<meta name="twitter:creator" content="Dave Kerr" />
+<meta name="twitter:image" content="">
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages :: Pagers and Pints — DevOps, SRE and Beer">
+<meta property="og:description" content="Update 10/15/2012
+With the release of Postgres 9.1.6 I believe that what we were running into was the critical bug that&amp;rsquo;s fixed in that release regarding WAL replay.
+So Mystery Solved!
+I&amp;rsquo;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
+Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0 Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298 Aug 9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG: last completed transaction was at log time 2012-08-09 09:16:08." />
+<meta property="og:url" content="/posts/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/" />
+<meta property="og:site_name" content="Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages" />
+<meta property="og:image" content="">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2012-08-14 04:53:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="">
+
+
+<div class="container">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="../../">
+  <div class="logo">
+    Pagers and Pints
+  </div>
+</a>
+
+    </div>
+    <div class="menu-trigger">menu</div>
+  </div>
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="post">
+  <h1 class="post-title">
+    <a href="../../posts/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/">Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages</a></h1>
+  <div class="post-meta">
+    <span class="post-date">
+      2012-08-14
+    </span>
+    
+    <span class="post-author">::
+      Dave Kerr
+    </span>
+    
+  </div>
+
+  
+  <span class="post-tags">
+    
+    #<a href="../../tags/postgresql/">postgresql</a>&nbsp;
+    
+  </span>
+  
+
+  
+
+  <div class="post-content">
+    <p><strong>Update 10/15/2012</strong><br />
+With the release of <a href="http://www.postgresql.org/docs/9.1/static/release-9-1-6.html">Postgres 9.1.6</a> I believe that what we were running into was the critical bug that&rsquo;s fixed in that release regarding WAL replay.<br />
+So Mystery Solved!</p>
+
+<p>I&rsquo;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.</p>
+
+<pre><code>Aug  9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG:  trigger file found: /db/9.1/data/failover  
+Aug  9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL:  terminating walreceiver process due to administrator command  
+Aug  9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG:  invalid record length at 398/1D0002F0  
+Aug  9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG:  redo done at 398/1D000298  
+Aug  9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG:  last completed transaction was at log time 2012-08-09 09:16:08.497124+00  
+Aug  9 14:06:23 db01 postgres[11005]: [12-1] user=,db=,host= LOG:  selected new timeline ID: 10  
+Aug  9 14:06:23 db01 postgres[11005]: [13-1] user=,db=,host= LOG:  archive recovery complete  
+Aug  9 14:06:23 db01 postgres[11005]: [14-1] user=,db=,host= WARNING:  page 1563020 of relation base/16436/47773 was uninitialized  
+Aug  9 14:06:23 db01 postgres[11005]: [15-1] user=,db=,host= WARNING:  page 1563023 of relation base/16436/47773 was uninitialized  
+Aug  9 14:06:23 db01 postgres[11005]: [16-1] user=,db=,host= WARNING:  page 1563021 of relation base/16436/47773 was uninitialized  
+Aug  9 14:06:23 db01 postgres[11005]: [17-1] user=,db=,host= WARNING:  page 1563022 of relation base/16436/47773 was uninitialized  
+Aug  9 14:06:23 db01 postgres[11005]: [18-1] user=,db=,host= WARNING:  page 792619 of relation base/16436/47776 was uninitialized  
+Aug  9 14:06:23 db01 postgres[11005]: [19-1] user=,db=,host= PANIC:  WAL contains references to invalid pages  
+Aug  9 14:06:49 db01 postgres[11003]: [2-1] user=,db=,host= LOG:  startup process (PID 11005) was terminated by signal 6: Aborted  
+Aug  9 14:06:49 db01 postgres[11003]: [3-1] user=,db=,host= LOG:  terminating any other active server processes  
+</code></pre>
+
+<p>I believe that this has something to do with the methodology that I use to resync my mirrors after a failover. The environments that I&rsquo;ve seen this on have gone through a lot of failover testing. The scenario looks something like:</p>
+
+<pre><code>A[Master] =&gt; B[Standby]  
+...Failover...  
+B[Master]  
+A[Down]  
+rsync A from B  
+B[Master] =&gt; A[Standby]  
+...Failback...  
+A[Master]  
+B[Down]  
+resync B from A  
+etc.  
+</code></pre>
+
+<p>The process I use to sync, and resync doesn&rsquo;t change.</p>
+
+<pre><code class="language-bash/shell">#!/bin/ksh  
+  
+SOURCE=$1  
+  
+if \[ -z &quot;$SOURCE&quot; \]; then  
+ echo &quot;Usage: $0 &quot;  
+ exit 1  
+fi  
+  
+. /etc/sysconfig/pgsql/postgresql-9.1  
+  
+export PGDATA  
+export PGPORT  
+  
+rm -f $PGDATA/failover  
+  
+pg_ctl stop -D $PGDATA -m immediate  
+psql -h $SOURCE -p $PGPORT &lt;&lt;EOD  
+checkpoint;  
+select pg\_start\_backup('mirror');  
+EOD  
+rsync -avv --delete-delay \  
+  --exclude postgresql.conf  \  
+  --exclude pg_hba.conf \  
+  --exclude server.conf \  
+  --exclude archive.conf \  
+  --exclude recovery.conf \  
+  --exclude recovery.done \  
+  --exclude pg_ident.conf \  
+  --exclude failover \  
+         --exclude pg_xlog \  
+         --exclude postmaster.pid \  
+   $SOURCE:$PGDATA/ $PGDATA  
+psql -h $SOURCE -p $PGPORT -c &quot;select pg\_stop\_backup()&quot;  
+cp $PGDATA/recovery.done $PGDATA/recovery.conf  
+pg_ctl start -D $PGDATA   
+</code></pre>
+
+<p>I don&rsquo;t think anything inherently wrong with this method, so I could be coming across a linux bug or a Postgres bug.</p>
+
+<p>Some investigation with the fine fellows at 2nd Quadrant has shown that the failed pages are all in index relations.</p>
+
+<p>Our next step in debugging the process will be to start the server with DEBUG3 and see if we can get more info. Unfortunately I&rsquo;ve blown away that mirror, so I have to wait for it to happen again.</p>
+
+<p>Stay tuned.</p>
+
+  </div>
+  
+  <div class="pagination">
+    <div class="pagination__title">
+      <span
+        class="pagination__title-h">Read other posts</span>
+      <hr />
+    </div>
+    <div class="pagination__buttons">
+      
+      <span class="button previous">
+        <a href="../../posts/mention-in-the-postgres-release-notes/">
+          <span class="button__icon">←</span>
+          <span class="button__text">Mention in the Postgres release notes</span>
+        </a>
+      </span>
+      
+      
+      <span class="button next">
+        <a href="../../posts/i-o-spikes-during-checkpoint/">
+          <span class="button__text">I/O Spikes during Checkpoint</span>
+          <span class="button__icon">→</span>
+        </a>
+      </span>
+      
+    </div>
+  </div>
+  
+
+  
+
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2019 Powered by <a href="http://gohugo.io">Hugo</a></span>
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="../../assets/main.js"></script>
+<script src="../../assets/prism.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

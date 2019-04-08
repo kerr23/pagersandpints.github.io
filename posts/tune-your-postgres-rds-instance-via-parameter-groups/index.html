@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Tune your Postgres RDS instance via parameter groups :: Pagers and Pints — DevOps, SRE and Beer</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="description" content="It seems like the folks at Amazon set some strange defaults for their RDS Postgres instances and they make it pretty darn difficult to allow for dynamically sized instance.
+You tune your Postgres RDS instance via Parameter Groups. In the parameter group configuration is all of the normal PG tuning parameters from your postgresql.conf.
+They provide you with a variable: {DBInstanceClassMemory} which returns the memory in bytes available to the instance, and you can use that in some limited ways to dynamically set parameters based on the instance type you chose for your RDS database."/>
+<meta name="keywords" content="DevOps, SRE, Site Reliability, Pager"/>
+<meta name="robots" content="noodp"/>
+<link rel="canonical" href="../../posts/tune-your-postgres-rds-instance-via-parameter-groups/" />
+
+
+<link rel="stylesheet" href="../../assets/style.css">
+
+  <link rel="stylesheet" href="../../assets/green.css">
+
+
+
+<link rel="stylesheet" href="../../style.css">
+
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../img/apple-touch-icon-144-precomposed.png">
+
+<link rel="shortcut icon" href="../../img/favicon/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Tune your Postgres RDS instance via parameter groups :: Pagers and Pints — DevOps, SRE and Beer" />
+<meta name="twitter:description" content="It seems like the folks at Amazon set some strange defaults for their RDS Postgres instances and they make it pretty darn difficult to allow for dynamically sized instance.
+You tune your Postgres RDS instance via Parameter Groups. In the parameter group configuration is all of the normal PG tuning parameters from your postgresql.conf.
+They provide you with a variable: {DBInstanceClassMemory} which returns the memory in bytes available to the instance, and you can use that in some limited ways to dynamically set parameters based on the instance type you chose for your RDS database." />
+<meta name="twitter:site" content="/" />
+<meta name="twitter:creator" content="Dave Kerr" />
+<meta name="twitter:image" content="">
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Tune your Postgres RDS instance via parameter groups :: Pagers and Pints — DevOps, SRE and Beer">
+<meta property="og:description" content="It seems like the folks at Amazon set some strange defaults for their RDS Postgres instances and they make it pretty darn difficult to allow for dynamically sized instance.
+You tune your Postgres RDS instance via Parameter Groups. In the parameter group configuration is all of the normal PG tuning parameters from your postgresql.conf.
+They provide you with a variable: {DBInstanceClassMemory} which returns the memory in bytes available to the instance, and you can use that in some limited ways to dynamically set parameters based on the instance type you chose for your RDS database." />
+<meta property="og:url" content="/posts/tune-your-postgres-rds-instance-via-parameter-groups/" />
+<meta property="og:site_name" content="Tune your Postgres RDS instance via parameter groups" />
+<meta property="og:image" content="">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2013-11-20 00:39:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="">
+
+
+<div class="container">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="../../">
+  <div class="logo">
+    Pagers and Pints
+  </div>
+</a>
+
+    </div>
+    <div class="menu-trigger">menu</div>
+  </div>
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="post">
+  <h1 class="post-title">
+    <a href="../../posts/tune-your-postgres-rds-instance-via-parameter-groups/">Tune your Postgres RDS instance via parameter groups</a></h1>
+  <div class="post-meta">
+    <span class="post-date">
+      2013-11-20
+    </span>
+    
+    <span class="post-author">::
+      Dave Kerr
+    </span>
+    
+  </div>
+
+  
+  <span class="post-tags">
+    
+    #<a href="../../tags/aws/">aws</a>&nbsp;
+    
+    #<a href="../../tags/postgresql/">postgresql</a>&nbsp;
+    
+  </span>
+  
+
+  
+
+  <div class="post-content">
+    
+
+<p>It seems like the folks at Amazon set some strange defaults for their RDS Postgres instances and they make it pretty darn difficult to allow for dynamically sized instance.</p>
+
+<p>You tune your Postgres RDS instance via Parameter Groups. In the parameter group configuration is all of the normal PG tuning parameters from your postgresql.conf.</p>
+
+<p>They provide you with a variable: {DBInstanceClassMemory} which returns the memory in bytes available to the instance, and you can use that in some limited ways to dynamically set parameters based on the instance type you chose for your RDS database. There may be more of these variables but I wasn&rsquo;t able to find them.</p>
+
+<p>One commenter pointed out that DBInstanceClassMemory is possibly not the entire memory of the machine. So for example: DBInstanceClassMemory on an m1.xlarge would not be 16106127360 (16GB) but instead they lower it to take into account the memory allocated to the OS. I hope that this will be changed in the futures since most postgres tuning guides are based on total system memory and not mem - arbitrary OS usage.</p>
+
+<p>It&rsquo;d be easy to just hop in and hardcode you&rsquo;re values, but that&rsquo;s not really very fun now is it? And besides we want to be able to grow our instances or spin up smaller / larger read replicas w/o defining a Parameter Group for each size we might want. So I&rsquo;m endeavoring to make my parameter group as dynamic as possible.</p>
+
+<p>I spun up an <em>m1.xlarge</em> RDS instance and did some playing around.</p>
+
+<p>Before we get stared: one thing to note is that you don&rsquo;t want any spaces between the {}&rsquo;s when doing calculations, otherwise AWS will respond with a format error. It also seems to have problems with multiple divisions or multiplications. Some areas they take, often they don&rsquo;t.</p>
+
+<p>Below is a list of configuration parameters that I usually set in all my databases (which I base on PgTune). Naturally you&rsquo;d want to set these based on your needs, but I find that PgTune gets you 90% there most of the time.</p>
+
+<p><strong>Edit:</strong> As some commenters have pointed out I got a few of the calculations wrong by not taking into account that RDS was using kb for some parameters, or other reasons (I actually suspect that amazon made a change to how they&rsquo;re calculating these parameters). I&rsquo;ve updated the values below with the correct / current information.</p>
+
+<h2 id="max-connections">max_connections </h2>
+
+<p>We all know that max_connections is best expressed at a function of # of CPUs, however Amazon went with this formula: {DBInstanceClassMemory/12582880} - which on the m1.large would leave you with 604 connections&hellip;. Unless Amazon added a connection pooler to postgres I don&rsquo;t see how that would possibly work.</p>
+
+<p>Folks migrating from MySQL or Oracle could easily get tripped up by not paying proper attention that that parameter.</p>
+
+<p>I usually keep max connections to around 200 just because I usually deal with Ruby/Java where I need to oversubscribe a bit.</p>
+
+<hr />
+
+<h2 id="shared-buffers">shared_buffers </h2>
+
+<p>The default here is: {DBInstanceClassMemory/32768} which is correct. Originally it didn&rsquo;t seem to calculate correctly so I had recommended a change.</p>
+
+<hr />
+
+<h2 id="checkpoint-segments">checkpoint_segments</h2>
+
+<p>The default # of checkpoint segments is 16 which is a pretty good base, however if you&rsquo;re a web application (which you probably are if you&rsquo;re using RDS) PgTune recommends that you set it to 8.</p>
+
+<hr />
+
+<h2 id="work-mem">work_mem</h2>
+
+<p>work_mem is a little tricky. I, and pgtune, usually base it on max_connections to calculate this value. However I haven&rsquo;t managed to find a way to reference a database parameter from within the RDS parameter section. For example: {max_connections} doesn&rsquo;t work.</p>
+
+<p>So you&rsquo;ll need to hard code something like your connections in there.</p>
+
+<p>So work_mem: {DBInstanceClassMemory/204800} # (200 (max_connections) * 1024 = 204800)</p>
+
+<p>On an m1.xlarge that would give you  ~74MB which is what pgtune would give you on the same instance.</p>
+
+<hr />
+
+<h2 id="maintenance-work-mem">maintenance_work_mem</h2>
+
+<p>For this parameter RDS just uses the postgres default which is 16MB so creating indexes on large tables would end up taking a few years.</p>
+
+<p>I try to keep this one around 1GB if the machine has enough memory. A nice rule of thumb though would be System Memory (in bytes) / 16 (which is what pgtune generates).</p>
+
+<p>We need to take into account the fact that RDS deals in kb for this parameter so: {DBInstanceClassMemory/16384}  (16*1024)</p>
+
+<p>This gives us 924MB on an m1.xlarge</p>
+
+<hr />
+
+<h2 id="effective-cache-size">effective_cache_size</h2>
+
+<p>Effective cache size is generally tricky in AWS since even with provisioned IOPS you&rsquo;re getting slightly better than thumb-drive speed out of your disks. So you may benefit from a smaller effective_cache_size.</p>
+
+<p>As commenter Alexandre Russel pointed out RDSs unit of measure for effective_cache_size is in 8kB blocks</p>
+
+<p>The effective_cache_size defaults associated with RDS are {DBInstanceClassMemory/16384}<br />
+So DBInstanceClassMemory / 2 * 8k or, in other words, 50%.</p>
+
+<p>To get it closer to the 75% we would normally use we can try (75/(100*8192))</p>
+
+<p>{DBInstanceClassMemory*<sup>75</sup>&frasl;<sub>819200</sub>} which brings us up to a little over 10GB for an m1.xlarge.</p>
+
+<hr />
+
+<h2 id="wal-buffers">wal_buffers</h2>
+
+<p>Uses the postgres default of 2048 bytes. I usually do 512 * checkpoint segments for this one so you may need to just hardcode it in at 4096</p>
+
+<hr />
+
+<h2 id="checkpoint-completion-target">checkpoint_completion_target</h2>
+
+<p>Again no good way to dynamically set this one, fortunately it&rsquo;s pretty fixed for a web workload at 0.7</p>
+
+  </div>
+  
+  <div class="pagination">
+    <div class="pagination__title">
+      <span
+        class="pagination__title-h">Read other posts</span>
+      <hr />
+    </div>
+    <div class="pagination__buttons">
+      
+      <span class="button previous">
+        <a href="../../posts/dockerfile-golf-or-optimizing-the-docker-build-process/">
+          <span class="button__icon">←</span>
+          <span class="button__text">Dockerfile Golf (or optimizing the Docker build process)</span>
+        </a>
+      </span>
+      
+      
+      <span class="button next">
+        <a href="../../posts/mention-in-the-postgres-release-notes/">
+          <span class="button__text">Mention in the Postgres release notes</span>
+          <span class="button__icon">→</span>
+        </a>
+      </span>
+      
+    </div>
+  </div>
+  
+
+  
+
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2019 Powered by <a href="http://gohugo.io">Hugo</a></span>
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="../../assets/main.js"></script>
+<script src="../../assets/prism.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
