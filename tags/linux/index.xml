@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Uncategorized on Pagers and Pints</title>
-    <link>/tags/uncategorized/</link>
-    <description>Recent content in Uncategorized on Pagers and Pints</description>
+    <title>Linux on Pagers and Pints</title>
+    <link>/tags/linux/</link>
+    <description>Recent content in Linux on Pagers and Pints</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 15 Oct 2012 22:31:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 25 Jun 2012 16:03:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/uncategorized/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Mention in the Postgres release notes</title>
-      <link>/posts/mention-in-the-postgres-release-notes/</link>
-      <pubDate>Mon, 15 Oct 2012 22:31:00 +0000</pubDate>
-      
-      <guid>/posts/mention-in-the-postgres-release-notes/</guid>
-      <description>I recently submitted a (very) small patch for PostgreSQL to fix a problem we were having with the backup label not getting fsynced to disk. (which is a problem if you&amp;rsquo;re using something like AWS or SAN snapshots.)
- I kindly got a mention in the release notes for it, pretty cool! (thanks guys!)</description>
-    </item>
     
     <item>
       <title>pg_service.conf in redhat</title>

@@ -30,20 +30,20 @@
     </item>
     
     <item>
+      <title>Linux</title>
+      <link>/tags/linux/</link>
+      <pubDate>Mon, 25 Jun 2012 16:03:00 +0000</pubDate>
+      
+      <guid>/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Postgresql</title>
       <link>/tags/postgresql/</link>
       <pubDate>Fri, 05 Feb 2016 00:12:00 +0000</pubDate>
       
       <guid>/tags/postgresql/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Uncategorized</title>
-      <link>/tags/uncategorized/</link>
-      <pubDate>Mon, 15 Oct 2012 22:31:00 +0000</pubDate>
-      
-      <guid>/tags/uncategorized/</guid>
       <description></description>
     </item>
     

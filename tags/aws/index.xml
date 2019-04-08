@@ -33,16 +33,6 @@ When I started looking into RDS Postgres a while back I realized that the defaul
     </item>
     
     <item>
-      <title>Stackdriver Acquired by google</title>
-      <link>/posts/stackdriver-acquired-by-google/</link>
-      <pubDate>Thu, 08 May 2014 04:28:00 +0000</pubDate>
-      
-      <guid>/posts/stackdriver-acquired-by-google/</guid>
-      <description>Grats to Stackdriver on their Acquisition by Google.
-Now if they&amp;rsquo;d like to bring me, and my Stackdriver Pluggable Custom Metrics along. That&amp;rsquo;d be just peachy.</description>
-    </item>
-    
-    <item>
       <title>Tune your Postgres RDS instance via parameter groups</title>
       <link>/posts/tune-your-postgres-rds-instance-via-parameter-groups/</link>
       <pubDate>Wed, 20 Nov 2013 00:39:00 +0000</pubDate>

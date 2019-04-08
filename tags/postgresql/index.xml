@@ -33,17 +33,6 @@ When I started looking into RDS Postgres a while back I realized that the defaul
     </item>
     
     <item>
-      <title>PostgreSQL Performance on Docker</title>
-      <link>/posts/postgresql-performance-on-docker/</link>
-      <pubDate>Thu, 26 Jun 2014 03:05:00 +0000</pubDate>
-      
-      <guid>/posts/postgresql-performance-on-docker/</guid>
-      <description>While preparing my presentation on Postgres and Docker to the PDX Postgres User Group for the June meeting, I thought it would be cool to run Postgres on Docker through some rough benchmarks. What I ended up finding was fairly surprising.
-The Setup For this test I used Digital Ocean&amp;rsquo;s smallest droplet 512M RAM/1 CPU/20G SSD Disks.
-They have an awesome feature where you can chose the type of application you want to run on the droplet and they&amp;rsquo;ll pre-configure it for you.</description>
-    </item>
-    
-    <item>
       <title>Tune your Postgres RDS instance via parameter groups</title>
       <link>/posts/tune-your-postgres-rds-instance-via-parameter-groups/</link>
       <pubDate>Wed, 20 Nov 2013 00:39:00 +0000</pubDate>
@@ -55,17 +44,13 @@ They provide you with a variable: {DBInstanceClassMemory} which returns the memo
     </item>
     
     <item>
-      <title>Presentation @PDXPUG</title>
-      <link>/posts/presentation-pdxpug/</link>
-      <pubDate>Wed, 12 Sep 2012 17:46:00 +0000</pubDate>
+      <title>Mention in the Postgres release notes</title>
+      <link>/posts/mention-in-the-postgres-release-notes/</link>
+      <pubDate>Mon, 15 Oct 2012 22:31:00 +0000</pubDate>
       
-      <guid>/posts/presentation-pdxpug/</guid>
-      <description>I recently did a talk about vertically scaling Postgres for the PDXPUG Portland Postgres User group.
-The presentation is mostly about some observations and challenges that I&amp;rsquo;ve run into while designing and running a very large Postgres install.
-They were kind enough to record the video and post it on Vimo.
-(Also, it turns out I&amp;rsquo;m not the greatest public speaker)
-[vimeo 49314500 w=500 h=375]
-PDXPUG: Vertically Scaling Postgres from Mark Wong on Vimeo.</description>
+      <guid>/posts/mention-in-the-postgres-release-notes/</guid>
+      <description>I recently submitted a (very) small patch for PostgreSQL to fix a problem we were having with the backup label not getting fsynced to disk. (which is a problem if you&amp;rsquo;re using something like AWS or SAN snapshots.)
+ I kindly got a mention in the release notes for it, pretty cool! (thanks guys!)</description>
     </item>
     
     <item>
@@ -74,11 +59,11 @@ PDXPUG: Vertically Scaling Postgres from Mark Wong on Vimeo.</description>
       <pubDate>Tue, 14 Aug 2012 04:53:00 +0000</pubDate>
       
       <guid>/posts/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/</guid>
-      <description>I&amp;rsquo;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
-Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover
-Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command
-Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0
-Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298</description>
+      <description>Update 10/15/2012
+With the release of Postgres 9.1.6 I believe that what we were running into was the critical bug that&amp;rsquo;s fixed in that release regarding WAL replay.
+So Mystery Solved!
+I&amp;rsquo;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
+Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0 Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298 Aug 9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG: last completed transaction was at log time 2012-08-09 09:16:08.</description>
     </item>
     
     <item>
@@ -96,17 +81,24 @@ Date r/s w/s rsec/s wsec/s await svctm %util
     </item>
     
     <item>
+      <title>pg_service.conf in redhat</title>
+      <link>/posts/pg_service-conf-in-redhat/</link>
+      <pubDate>Mon, 25 Jun 2012 16:03:00 +0000</pubDate>
+      
+      <guid>/posts/pg_service-conf-in-redhat/</guid>
+      <description>I&amp;rsquo;m toying around with pg_service.conf. It wasn&amp;rsquo;t obvious - but I was able to determine that if you add pg_service.conf to /etc/sysconfig/pgsql/ it will get picked up globally.</description>
+    </item>
+    
+    <item>
       <title>psql - reverse search history</title>
       <link>/posts/psql-reverse-search-history/</link>
       <pubDate>Thu, 14 Jun 2012 21:15:00 +0000</pubDate>
       
       <guid>/posts/psql-reverse-search-history/</guid>
       <description>psql the postgresql command line client is usually compiled with libreadline support. As a result of this you can use some neat functionality such as reverse search by hitting ctl-r within the client.
-report=#
-hit CTL-r
-(reverse-i-search)`&amp;rsquo;:
-start typing
-(reverse-i-search)`sel&amp;rsquo;: select * from report.audit where</description>
+report=# hit CTL-r
+(reverse-i-search)`&#39;: start typing
+(reverse-i-search)`sel&#39;: select * from report.audit where</description>
     </item>
     
     <item>
@@ -150,9 +142,7 @@ select setval(&#39;sequence_name&#39;, select max(column_name) from tablename); 
       
       <guid>/posts/using-generate_series-in-postgresql/</guid>
       <description>If you want to dummy up a bunch of data in PostgreSQL you can use this neat little trick
-create table test (a int);
-insert into test (select generate_series(0,999,1));
-INSERT 0 1000;</description>
+create table test (a int); insert into test (select generate_series(0,999,1)); INSERT 0 1000;  </description>
     </item>
     
     <item>
@@ -162,15 +152,9 @@ INSERT 0 1000;</description>
       
       <guid>/posts/using-insert-returning-with-perl-and-postgresql/</guid>
       <description>PostgreSQL provides the ability to return a value on insert. so for example:
-create table foo (id serial, name text);
-insert into foo(&amp;lsquo;dave&amp;rsquo;) returning id;
-Will return the auto-generated value for &amp;ldquo;id&amp;rdquo; assigned to &amp;lsquo;dave&amp;rsquo;
+create table foo (id serial, name text); insert into foo(&#39;dave&#39;) returning id;  Will return the auto-generated value for &amp;ldquo;id&amp;rdquo; assigned to &amp;lsquo;dave&amp;rsquo;
 You can leverage this from within Perl by doing something like this:
-my $foo_insert = &amp;ldquo;insert into foo(?) returning id&amp;rdquo;
-my $foo_cur = $dbh-&amp;gt;prepare($foo_insert);
-$foo_cur-&amp;gt;execute(&amp;lsquo;Dave&amp;rsquo;);
-my $foo_rec = $foo_cur-&amp;gt;fetchrow_hashref();
-print $foo_rec{&amp;ldquo;id&amp;rdquo;};</description>
+my $foo_insert = &amp;quot;insert into foo(?) returning id&amp;quot; my $foo_cur = $dbh-&amp;gt;prepare($foo_insert); $foo_cur-&amp;gt;execute(&#39;Dave&#39;); my $foo_rec = $foo_cur-&amp;gt;fetchrow_hashref(); print $foo_rec{&amp;quot;id&amp;quot;};  </description>
     </item>
     
     <item>
