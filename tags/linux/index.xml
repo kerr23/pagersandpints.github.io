@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on Turning off Pagers and Filling up Pints</title>
+    <link>https://pagersandpints.com/tags/linux/</link>
+    <description>Recent content in linux on Turning off Pagers and Filling up Pints</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 25 Jun 2012 16:03:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://pagersandpints.com/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>pg_service.conf in redhat</title>
+      <link>https://pagersandpints.com/2012/06/pg_service-conf-in-redhat/</link>
+      <pubDate>Mon, 25 Jun 2012 16:03:00 +0000</pubDate>
+      
+      <guid>https://pagersandpints.com/2012/06/pg_service-conf-in-redhat/</guid>
+      <description>I&#39;m toying around with pg_service.conf. It wasn&#39;t obvious - but I was able to determine that if you add pg_service.conf to /etc/sysconfig/pgsql/ it will get picked up globally.</description>
+    </item>
+    
+    <item>
+      <title>How To Fix Stalled CUPS Printing</title>
+      <link>https://pagersandpints.com/2012/05/how-to-fix-stalled-cups-printing/</link>
+      <pubDate>Sun, 13 May 2012 12:12:00 +0000</pubDate>
+      
+      <guid>https://pagersandpints.com/2012/05/how-to-fix-stalled-cups-printing/</guid>
+      <description>Every once in a while CUPS printing just stalls, no reason that I can tell. (I blame the network, naturally) but what ends up happening is that the print jobs get backed up and you need to clear out the queue. The fastest way to do this is to do:
+rm /var/spool/cups/* /etc/init.d/cups restart </description>
+    </item>
+    
+  </channel>
+</rss>

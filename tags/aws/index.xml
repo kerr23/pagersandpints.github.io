@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>aws on Turning off Pagers and Filling up Pints</title>
+    <link>https://pagersandpints.com/tags/aws/</link>
+    <description>Recent content in aws on Turning off Pagers and Filling up Pints</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 05 Feb 2016 00:12:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://pagersandpints.com/tags/aws/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Amazon Maintenance and your RDS Instances</title>
+      <link>https://pagersandpints.com/2016/02/amazon-maintenance-and-your-rds-instances/</link>
+      <pubDate>Fri, 05 Feb 2016 00:12:00 +0000</pubDate>
+      
+      <guid>https://pagersandpints.com/2016/02/amazon-maintenance-and-your-rds-instances/</guid>
+      <description>I recently had the pleasure of Amazon telling me that they had to reboot all of my Postgres RDS instances to apply some security patches.
+When using RDS you generally expect that Amazon is going to do something like this and I was at least happy that they told me about it and gave me the option to trigger it on a specific maintenance window or else on my own time (up to a drop dead date where they&#39;d just do it for me)</description>
+    </item>
+    
+    <item>
+      <title>Introducing MrTuner and RDSTune</title>
+      <link>https://pagersandpints.com/2015/01/introducing-mrtuner-and-rdstune/</link>
+      <pubDate>Thu, 15 Jan 2015 22:42:00 +0000</pubDate>
+      
+      <guid>https://pagersandpints.com/2015/01/introducing-mrtuner-and-rdstune/</guid>
+      <description>Two simple gems to help tune your Postgres databases.
+I&#39;m a big fan of PgTune. I think that in many cases you can run PgTune and set-it-and-forget-it for your Postgres parameters. I like it so much that I often wish I had access to it in my code - especially when working with Puppet to provision new databases servers.
+When I started looking into RDS Postgres a while back I realized that the default configuration for those instances was lacking and I really wished I could run PgTune on the RDS instances.</description>
+    </item>
+    
+    <item>
+      <title>Tune your Postgres RDS instance via parameter groups</title>
+      <link>https://pagersandpints.com/2013/11/tune-your-postgres-rds-instance-via-parameter-groups/</link>
+      <pubDate>Wed, 20 Nov 2013 00:39:00 +0000</pubDate>
+      
+      <guid>https://pagersandpints.com/2013/11/tune-your-postgres-rds-instance-via-parameter-groups/</guid>
+      <description>It seems like the folks at Amazon set some strange defaults for their RDS Postgres instances and they make it pretty darn difficult to allow for dynamically sized instance.
+You tune your Postgres RDS instance via Parameter Groups. In the parameter group configuration is all of the normal PG tuning parameters from your postgresql.conf.
+They provide you with a variable: {DBInstanceClassMemory} which returns the memory in bytes available to the instance, and you can use that in some limited ways to dynamically set parameters based on the instance type you chose for your RDS database.</description>
+    </item>
+    
+  </channel>
+</rss>
