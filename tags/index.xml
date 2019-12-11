@@ -5,6 +5,7 @@
     <link>https://pagersandpints.com/tags/</link>
     <description>Recent content in Tags on Turning off Pagers and Filling up Pints</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
     <lastBuildDate>Mon, 27 May 2019 16:49:41 -0700</lastBuildDate>
     
 	<atom:link href="https://pagersandpints.com/tags/index.xml" rel="self" type="application/rss+xml" />
@@ -38,7 +39,7 @@
     </item>
     
     <item>
-      <title>postgresql</title>
+      <title>PostgreSQL</title>
       <link>https://pagersandpints.com/tags/postgresql/</link>
       <pubDate>Fri, 05 Feb 2016 00:12:00 +0000</pubDate>
       
