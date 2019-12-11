@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>postgresql on Turning off Pagers and Filling up Pints</title>
@@ -8,8 +8,17 @@
     <language>en-us</language>
     <lastBuildDate>Fri, 05 Feb 2016 00:12:00 +0000</lastBuildDate>
     
-	<atom:link href="https://pagersandpints.com/tags/postgresql/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://pagersandpints.com/tags/postgresql/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Containers, Configuration, and Consul</title>
+      <link>https://pagersandpints.com/2019/05/containers-consul-configuration/</link>
+      <pubDate>Mon, 27 May 2019 16:49:41 -0700</pubDate>
+      
+      <guid>https://pagersandpints.com/2019/05/containers-consul-configuration/</guid>
+      <description>Through the history of technology, configuration management has driven many design patterns. Empires have been built upon things such as Chef, Ansible, or Puppet all with the intent to remove barriers in managing configuration files for applications deployed in various places. One of the challenges with the traditional approach is the people who understand the configuration(the QA team, developers etc.) are usually different from the people who are managing the configs in Chef.</description>
+    </item>
     
     <item>
       <title>Amazon Maintenance and your RDS Instances</title>
@@ -30,6 +39,17 @@ When using RDS you generally expect that Amazon is going to do something like th
       <description>Two simple gems to help tune your Postgres databases.
 I&#39;m a big fan of PgTune. I think that in many cases you can run PgTune and set-it-and-forget-it for your Postgres parameters. I like it so much that I often wish I had access to it in my code - especially when working with Puppet to provision new databases servers.
 When I started looking into RDS Postgres a while back I realized that the default configuration for those instances was lacking and I really wished I could run PgTune on the RDS instances.</description>
+    </item>
+    
+    <item>
+      <title>Dockerfile Golf (or optimizing the Docker build process)</title>
+      <link>https://pagersandpints.com/2014/08/dockerfile-golf-or-optimizing-the-docker-build-process/</link>
+      <pubDate>Fri, 29 Aug 2014 21:19:00 +0000</pubDate>
+      
+      <guid>https://pagersandpints.com/2014/08/dockerfile-golf-or-optimizing-the-docker-build-process/</guid>
+      <description>I was working with a friend of mine on his startup Down For Whatever and he wanted to use Docker.
+I created a docker farm for him and we&#39;re using Centurion for deployments, we signed up for a docker hub account to store images and started pushing code.
+A few days later he emailed me saying that he wanted to switch to capistrano for code deployments instead of building a docker image each time because pushing the image to docker hub took too damn long.</description>
     </item>
     
     <item>
@@ -121,6 +141,16 @@ The only downside to this little tool is that it doesn&#39;t exactly work when y
 pg_rowcount ex:./pg\_rowcount.pl david.kerr pg\_catalog
 The output looks like this:
 Table Rows Size -------------------------------------------------------------- pg_statistic 1853 1672 kB pg_type 910 168 kB pg_attribute 9569 1488 kB pg_class 1371 416 kB pg_authid 52 16 kB pg_index 766 112 kB pg_operator 705 104 kB pg_database 44 16 kB You can download the script here</description>
+    </item>
+    
+    <item>
+      <title>How To Fix Stalled CUPS Printing</title>
+      <link>https://pagersandpints.com/2012/05/how-to-fix-stalled-cups-printing/</link>
+      <pubDate>Sun, 13 May 2012 12:12:00 +0000</pubDate>
+      
+      <guid>https://pagersandpints.com/2012/05/how-to-fix-stalled-cups-printing/</guid>
+      <description>Every once in a while CUPS printing just stalls, no reason that I can tell. (I blame the network, naturally) but what ends up happening is that the print jobs get backed up and you need to clear out the queue. The fastest way to do this is to do:
+rm /var/spool/cups/* /etc/init.d/cups restart </description>
     </item>
     
     <item>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages - Turning off Pagers and Filling up Pints
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="Update 10/15/2012
+With the release of Postgres 9.1.6 I believe that what we were running into was the critical bug that&#39;s fixed in that release regarding WAL replay.
+So Mystery Solved!
+I&#39;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
+Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0 Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298 Aug 9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG: last completed transaction was at log time 2012-08-09 09:16:08." />
+  <meta name="generator" content="Hugo 0.61.0 with theme pure" />
+  <title>Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages - Turning off Pagers and Filling up Pints</title>
+  
+
+  <link rel="stylesheet" href="https://pagersandpints.com/css/style.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+  <meta property="og:title" content="Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages" />
+<meta property="og:description" content="Update 10/15/2012
+With the release of Postgres 9.1.6 I believe that what we were running into was the critical bug that&#39;s fixed in that release regarding WAL replay.
+So Mystery Solved!
+I&#39;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
+Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0 Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298 Aug 9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG: last completed transaction was at log time 2012-08-09 09:16:08." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pagersandpints.com/2012/08/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/" />
+<meta property="article:published_time" content="2012-08-14T04:53:00+00:00" />
+<meta property="article:modified_time" content="2012-08-14T04:53:00+00:00" />
+<meta itemprop="name" content="Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages">
+<meta itemprop="description" content="Update 10/15/2012
+With the release of Postgres 9.1.6 I believe that what we were running into was the critical bug that&#39;s fixed in that release regarding WAL replay.
+So Mystery Solved!
+I&#39;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
+Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0 Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298 Aug 9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG: last completed transaction was at log time 2012-08-09 09:16:08.">
+<meta itemprop="datePublished" content="2012-08-14T04:53:00&#43;00:00" />
+<meta itemprop="dateModified" content="2012-08-14T04:53:00&#43;00:00" />
+<meta itemprop="wordCount" content="516">
+
+
+
+<meta itemprop="keywords" content="postgresql," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages"/>
+<meta name="twitter:description" content="Update 10/15/2012
+With the release of Postgres 9.1.6 I believe that what we were running into was the critical bug that&#39;s fixed in that release regarding WAL replay.
+So Mystery Solved!
+I&#39;ve recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.
+Aug 9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG: trigger file found: /db/9.1/data/failover Aug 9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL: terminating walreceiver process due to administrator command Aug 9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG: invalid record length at 398/1D0002F0 Aug 9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG: redo done at 398/1D000298 Aug 9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG: last completed transaction was at log time 2012-08-09 09:16:08."/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header"><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="Type something..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">Archives</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">Categories</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">Tags</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title"> Tags</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://pagersandpints.com/tags/aws/" class="tag-list-link">aws</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://pagersandpints.com/tags/consul/" class="tag-list-link">consul</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://pagersandpints.com/tags/docker/" class="tag-list-link">docker</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://pagersandpints.com/tags/linux/" class="tag-list-link">linux</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://pagersandpints.com/tags/postgresql/" class="tag-list-link">postgresql</a><span
+                    class="tag-list-count">15</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://pagersandpints.com/2019/05/containers-consul-configuration/" class="title">Containers, Configuration, and Consul</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2019-05-27 16:49:41 -0700 -0700" itemprop="datePublished">2019-05-27</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://pagersandpints.com/2016/02/amazon-maintenance-and-your-rds-instances/" class="title">Amazon Maintenance and your RDS Instances</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2016-02-05 00:12:00 &#43;0000 UTC" itemprop="datePublished">2016-02-05</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://pagersandpints.com/2015/01/introducing-mrtuner-and-rdstune/" class="title">Introducing MrTuner and RDSTune</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2015-01-15 22:42:00 &#43;0000 UTC" itemprop="datePublished">2015-01-15</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://pagersandpints.com/2014/08/dockerfile-golf-or-optimizing-the-docker-build-process/" class="title">Dockerfile Golf (or optimizing the Docker build process)</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2014-08-29 21:19:00 &#43;0000 UTC" itemprop="datePublished">2014-08-29</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://pagersandpints.com/2013/11/tune-your-postgres-rds-instance-via-parameter-groups/" class="title">Tune your Postgres RDS instance via parameter groups</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2013-11-20 00:39:00 &#43;0000 UTC" itemprop="datePublished">2013-11-20</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">Catalogue</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2012/08/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/"
+    >Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages</a
+  >
+</h1>
+
+      <div class="article-meta">
+        <span class="article-date">
+  <i class="icon icon-calendar-check"></i>
+<a href="https://pagersandpints.com/2012/08/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/" class="article-date">
+  <time datetime="2012-08-14 04:53:00 &#43;0000 UTC" itemprop="datePublished">2012-08-14</time>
+</a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+    <a class="article-tag-link" href="/tags/postgresql/"> postgresql </a>
+  </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2012/08/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/#comments"
+            class="article-comment-link">Comments</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">Word Count:516words</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">Read Count:3minutes </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p><strong>Update 10/15/2012</strong><br>
+With the release of <a href="http://www.postgresql.org/docs/9.1/static/release-9-1-6.html">Postgres 9.1.6</a> I believe that what we were running into was the critical bug that's fixed in that release regarding WAL replay.<br>
+So Mystery Solved!</p>
+<p>I've recently come across a problem with Streaming Replication where on failover the system generates a PANIC: WAL contains references to invalid pages error message.</p>
+<pre><code>Aug  9 14:06:22 db01 postgres[11005]: [8-1] user=,db=,host= LOG:  trigger file found: /db/9.1/data/failover  
+Aug  9 14:06:22 db01 postgres[11012]: [3-1] user=,db=,host= FATAL:  terminating walreceiver process due to administrator command  
+Aug  9 14:06:23 db01 postgres[11005]: [9-1] user=,db=,host= LOG:  invalid record length at 398/1D0002F0  
+Aug  9 14:06:23 db01 postgres[11005]: [10-1] user=,db=,host= LOG:  redo done at 398/1D000298  
+Aug  9 14:06:23 db01 postgres[11005]: [11-1] user=,db=,host= LOG:  last completed transaction was at log time 2012-08-09 09:16:08.497124+00  
+Aug  9 14:06:23 db01 postgres[11005]: [12-1] user=,db=,host= LOG:  selected new timeline ID: 10  
+Aug  9 14:06:23 db01 postgres[11005]: [13-1] user=,db=,host= LOG:  archive recovery complete  
+Aug  9 14:06:23 db01 postgres[11005]: [14-1] user=,db=,host= WARNING:  page 1563020 of relation base/16436/47773 was uninitialized  
+Aug  9 14:06:23 db01 postgres[11005]: [15-1] user=,db=,host= WARNING:  page 1563023 of relation base/16436/47773 was uninitialized  
+Aug  9 14:06:23 db01 postgres[11005]: [16-1] user=,db=,host= WARNING:  page 1563021 of relation base/16436/47773 was uninitialized  
+Aug  9 14:06:23 db01 postgres[11005]: [17-1] user=,db=,host= WARNING:  page 1563022 of relation base/16436/47773 was uninitialized  
+Aug  9 14:06:23 db01 postgres[11005]: [18-1] user=,db=,host= WARNING:  page 792619 of relation base/16436/47776 was uninitialized  
+Aug  9 14:06:23 db01 postgres[11005]: [19-1] user=,db=,host= PANIC:  WAL contains references to invalid pages  
+Aug  9 14:06:49 db01 postgres[11003]: [2-1] user=,db=,host= LOG:  startup process (PID 11005) was terminated by signal 6: Aborted  
+Aug  9 14:06:49 db01 postgres[11003]: [3-1] user=,db=,host= LOG:  terminating any other active server processes  
+</code></pre><p>I believe that this has something to do with the methodology that I use to resync my mirrors after a failover. The environments that I've seen this on have gone through a lot of failover testing. The scenario looks something like:</p>
+<pre><code>A[Master] =&gt; B[Standby]  
+...Failover...  
+B[Master]  
+A[Down]  
+rsync A from B  
+B[Master] =&gt; A[Standby]  
+...Failback...  
+A[Master]  
+B[Down]  
+resync B from A  
+etc.  
+</code></pre><p>The process I use to sync, and resync doesn't change.</p>
+<pre><code class="language-bash/shell" data-lang="bash/shell">#!/bin/ksh  
+  
+SOURCE=$1  
+  
+if \[ -z &quot;$SOURCE&quot; \]; then  
+ echo &quot;Usage: $0 &quot;  
+ exit 1  
+fi  
+  
+. /etc/sysconfig/pgsql/postgresql-9.1  
+  
+export PGDATA  
+export PGPORT  
+  
+rm -f $PGDATA/failover  
+  
+pg_ctl stop -D $PGDATA -m immediate  
+psql -h $SOURCE -p $PGPORT &lt;&lt;EOD  
+checkpoint;  
+select pg\_start\_backup('mirror');  
+EOD  
+rsync -avv --delete-delay \  
+  --exclude postgresql.conf  \  
+  --exclude pg_hba.conf \  
+  --exclude server.conf \  
+  --exclude archive.conf \  
+  --exclude recovery.conf \  
+  --exclude recovery.done \  
+  --exclude pg_ident.conf \  
+  --exclude failover \  
+         --exclude pg_xlog \  
+         --exclude postmaster.pid \  
+   $SOURCE:$PGDATA/ $PGDATA  
+psql -h $SOURCE -p $PGPORT -c &quot;select pg\_stop\_backup()&quot;  
+cp $PGDATA/recovery.done $PGDATA/recovery.conf  
+pg_ctl start -D $PGDATA   
+</code></pre><p>I don't think anything inherently wrong with this method, so I could be coming across a linux bug or a Postgres bug.</p>
+<p>Some investigation with the fine fellows at 2nd Quadrant has shown that the failed pages are all in index relations.</p>
+<p>Our next step in debugging the process will be to start the server with DEBUG3 and see if we can get more info. Unfortunately I've blown away that mirror, so I have to wait for it to happen again.</p>
+<p>Stay tuned.</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>Permalink: </strong>
+      <a href="https://pagersandpints.com/2012/08/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/" title="Streaming Replication, syncing mirrors and PANIC: WAL contains references to invalid pages" target="_blank" rel="external">https://pagersandpints.com/2012/08/streaming-replication-syncing-mirrors-and-panic-wal-contains-references-to-invalid-pages/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://pagersandpints.com/2012/07/i-o-spikes-during-checkpoint/" title="I/O Spikes during Checkpoint"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;Older</span></a>
+            </li>
+            <li class="next">
+                <a href="https://pagersandpints.com/2012/10/mention-in-the-postgres-release-notes/"
+                    title="Mention in the Postgres release notes"><span>Newer&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="Catalogue" role="button">
+                    <span>[&nbsp;</span><span>Catalogue</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+  <div class="copyright">
+    &copy;2017  -
+    2019
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/rust.min.js"></script>
+<script type="text/javascript"
+    src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script type="text/javascript" src="https://pagersandpints.com/js/application.js"></script>
+<script type="text/javascript" src="https://pagersandpints.com/js/plugin.js"></script>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            ROOT_URL: 'https:\/\/pagersandpints.com',
+            CONTENT_URL: 'https:\/\/pagersandpints.com\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://pagersandpints.com/js/insight.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154422416-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>
